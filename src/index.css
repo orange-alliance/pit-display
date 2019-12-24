@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap');
+
+#root {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #1d1d1d;
+    font-family: 'Roboto', sans-serif;
+    user-select: none;
+    padding: 0 50px 50px;
+
+    --table-row-height: 42px;
+    --table-row-padding: 8px;
+    --green: #00701a;
+    --red: rgb(255, 82, 82);
+    --light-red: rgba(255, 82, 82, .12);
+    --lighter-red: rgba(255, 82, 82, .1);
+    --blue: rgb(68, 138, 255);
+    --light-blue: rgba(68, 138, 255, .12);
+    --lighter-blue: rgba(68, 138, 255, .1);
+}
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.title {
+    color: #ffffff;
+    font-weight: 700;
+    margin: 0;
+}
+.subtitle {
+    padding-top: 5px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, .75);
+    margin: 0;
+}
+.row {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    overflow: hidden;
+}
+.marquee {
+    height: inherit;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+.card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #fafafa;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.table-row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-height: calc(var(--table-row-height) - var(--table-row-padding));
+}
+.table-row.table-header {
+    min-height: 56px;
+    font-weight: 500;
+    box-shadow: 0 10px 8px -5px rgba(0, 0, 0, 0.12);
+}
+.table-row:not(.table-header):nth-of-type(odd) {
+    background: rgba(0, 0, 0, .025);
+}
+.col {
+    min-height: calc(var(--table-row-height) - var(--table-row-padding));
+    padding: var(--table-row-padding) 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.rank, .wlt, .score {
+    width: 84px;
+    min-width: 84px;
+}
+.rp, .tbp, .played {
+    width: 72px;
+    min-width: 72px;
+}
+.team {
+    justify-content: start;
+}
+.match {
+    text-align: center;
+    width: 150px;
+    min-width: 150px;
+    font-weight: 500;
+}
+.table-header .red, .table-header .blue {
+    color: #ffffff;
+    height: 100%;
+    padding: 0;
+}
+.table-header .red {
+    background: var(--red);
+}
+.table-header .blue {
+    background: var(--blue);
+}
+.red {
+    height: 100%;
+    background: var(--lighter-red);
+}
+.table-row:not(.table-header):nth-of-type(odd) .red {
+    background: var(--light-red);
+}
+.blue {
+    height: 100%;
+    background: var(--lighter-blue);
+}
+.table-row:not(.table-header):nth-of-type(odd) .blue {
+    background: var(--light-blue);
+}
+.scroll {
+    animation: 48s linear 0s infinite normal none running marquee;
+    padding-bottom: 40px;
+}
+.error-message {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.error-message h1 {
+    color: #ffffff;
+    margin-bottom: 0;
+}
+.error-message h3 {
+    color: rgba(255, 255, 255, .75);
+    margin-top: 8px;
+}
+@keyframes marquee {
+    0% {
+        transform: translate(0, 0);
+        -webkit-transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(0, -100%);
+        -webkit-transform: translate(0, -100%);
+    }
+}

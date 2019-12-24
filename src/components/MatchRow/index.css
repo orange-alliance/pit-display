@@ -1,0 +1,12 @@
+.win-t .match {
+    color: var(--green)
+}
+.win-r .match, .win-r .red-score {
+    color: var(--red);
+}
+.win-b .match, .win-b .blue-score {
+    color: var(--blue);
+}
+.win-r .red, .win-b .blue, .win-r .red-score, .win-b .blue-score {
+    font-weight: 500;
+}
