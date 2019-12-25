@@ -70,8 +70,8 @@ class PitDisplay extends React.Component<IProps, IState> {
       { event ? <>
         <div style={{ padding: '40px 0' }}>
           <h1 className="title">{event.fullEventName}</h1>
-          <h3 className="subtitle">Real-time results are available at <b>The Orange Alliance</b>!</h3>
-          <h4 className="subtitle">https://ftc.events/{event.eventKey}</h4>
+          <h2 className="subtitle">Real-time results are available at <b>The Orange Alliance</b>!</h2>
+          <h4 className="subtitle2">https://ftc.events/{event.eventKey}</h4>
         </div>
         <div className="row">
           { rankings.length > 0 && matches.length > 0 ? <>

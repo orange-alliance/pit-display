@@ -33,6 +33,10 @@
     margin: 0;
 }
 .subtitle {
+    font-size: 1.16rem;
+    color: rgba(255, 255, 255, .85)!important;
+}
+.subtitle, .subtitle2 {
     padding-top: 5px;
     font-weight: 400;
     color: rgba(255, 255, 255, .75);
