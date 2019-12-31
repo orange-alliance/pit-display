@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "the-orange-alliance"
+  },
+  "targets": {
+    "the-orange-alliance": {
+      "hosting": {
+        "pit-display": [
+          "pit-display"
+        ]
+      }
+    }
+  }
+}
