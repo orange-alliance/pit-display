@@ -8,13 +8,18 @@ interface IProps {
 }
 
 const MatchRow: React.FC<IProps> = ({ match }) => {
+  const isPlayed = match.redScore > -1 || match.blueScore > -1;
+  const winner = match.redScore > match.blueScore ? 'R' : match.blueScore > match.redScore ? 'B' : 'T';
+
   return (
-    <div key={match.matchKey} className={'table-row win-' + getWinner(match).toLocaleLowerCase()}>
+    <div key={match.matchKey} className={'table-row ' + (isPlayed && 'win-' + winner.toLocaleLowerCase())}>
       <div className="col match">{match.matchName}</div>
       <div className="col score">
-        <span className="red-score">{match.redScore}</span>
-        &nbsp;-&nbsp;
-        <span className="blue-score">{match.blueScore}</span>
+        { isPlayed ? <>
+          <span className="red-score">{match.redScore}</span>
+          &nbsp;-&nbsp;
+          <span className="blue-score">{match.blueScore}</span>
+        </> : <span/>}
       </div>
       {match.participants.map((p) =>
         <div key={p.matchParticipantKey}className={'col ' + (p.station > 20 ? 'blue' : 'red')}>
@@ -24,7 +29,5 @@ const MatchRow: React.FC<IProps> = ({ match }) => {
     </div>
   );
 };
-
-const getWinner = (match: Match) => match.redScore > match.blueScore ? 'R' : match.blueScore > match.redScore ? 'B' : 'T';
 
 export default MatchRow;
