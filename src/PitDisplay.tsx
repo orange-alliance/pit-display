@@ -22,6 +22,8 @@ interface IState {
   rankings: Ranking[],
   matches: Match[],
   loading: boolean
+  rankingsScroll: boolean,
+  matchesScroll: boolean
 }
 
 class PitDisplay extends React.Component<IProps, IState> {
@@ -34,7 +36,9 @@ class PitDisplay extends React.Component<IProps, IState> {
       event: null,
       rankings: [],
       matches: [],
-      loading: true
+      loading: true,
+      rankingsScroll: false,
+      matchesScroll: false
     };
   }
 
@@ -47,6 +51,7 @@ class PitDisplay extends React.Component<IProps, IState> {
       console.error(error);
       this.setState({ loading: false });
     });
+    window.onresize = () => this.setState({}); // Check cards height [componentDidUpdate]
   }
 
   public fetchData(event: Event) {
@@ -61,8 +66,23 @@ class PitDisplay extends React.Component<IProps, IState> {
     });
   }
 
+  componentDidUpdate() {
+    const newState: any = {};
+    const cardHeight = document.querySelector('.card')?.clientHeight || 0;
+    const contextHeight = cardHeight - 56; // Minus header
+    const bottomPadding = 40;
+
+    const rankingsShouldScroll = (document.querySelector('#rankings-scroll')?.clientHeight || 0) - bottomPadding > contextHeight;
+    const matchesShouldScroll = (document.querySelector('#matches-scroll')?.clientHeight || 0) - bottomPadding > contextHeight;
+
+    // Control of endless loop of state update
+    if (this.state.rankingsScroll !== rankingsShouldScroll) newState.rankingsScroll = rankingsShouldScroll;
+    if (this.state.matchesScroll !== matchesShouldScroll) newState.matchesScroll = matchesShouldScroll;
+    if (Object.keys(newState).length > 0) this.setState(newState);
+  }
+
   public render() {
-    const { loading, event, rankings, matches } = this.state;
+    const { loading, event, rankings, matches, rankingsScroll, matchesScroll } = this.state;
     if (loading) return <span/>;
     const rankingsView = rankings.map((ranking: Ranking) => <RankingRow key={ranking.rankKey} ranking={ranking} />);
     const matchesView = matches.map((match: Match) => <MatchRow key={match.matchKey} match={match} />);
@@ -85,8 +105,8 @@ class PitDisplay extends React.Component<IProps, IState> {
                 <div className="col played">Played</div>
               </div>
               <div className="marquee">
-                <div className="scroll" style={animation(rankings)} children={rankingsView} />
-                <div className="scroll second-scroll" style={animation(rankings)} children={rankingsView} />
+                <div className="scroll" id="rankings-scroll" style={rankingsScroll ? animation(rankings) : {}} children={rankingsView} />
+                <div className="scroll second-scroll" style={rankingsScroll ? animation(rankings) : { display: 'none' }} children={rankingsView} />
               </div>
             </div>
             <div className="card" style={{marginLeft: 20}}>
@@ -97,8 +117,8 @@ class PitDisplay extends React.Component<IProps, IState> {
                 <div className="col blue">Blue Alliance</div>
               </div>
               <div className="marquee">
-                <div className="scroll" style={animation(matches)} children={matchesView} />
-                <div className="scroll second-scroll" style={animation(matches)} children={matchesView} />
+                <div className="scroll" id="matches-scroll" style={matchesScroll ? animation(matches) : {}} children={matchesView} />
+                <div className="scroll second-scroll" style={matchesScroll ? animation(matches) : { display: 'none' }} children={matchesView} />
               </div>
             </div>
           </> : <div className="error-message">

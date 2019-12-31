@@ -133,7 +133,6 @@
     background: var(--light-blue);
 }
 .scroll {
-    animation: 48s linear 0s infinite normal none running marquee;
     padding-bottom: 40px;
 }
 .error-message {
