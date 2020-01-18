@@ -27,6 +27,12 @@
     flex-direction: column;
     justify-content: space-between;
 }
+.qrcode {
+    height: 92px;
+    width: 92px;
+    padding: 2px;
+    border-radius: 16px;
+}
 .title {
     color: #ffffff;
     font-weight: 700;

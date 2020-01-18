@@ -1,4 +1,5 @@
 import React from 'react';
+import QRCode from 'qrcode';
 import { API } from '@the-orange-alliance/api/lib';
 import { Event, Ranking, Match } from '@the-orange-alliance/api/lib/models';
 import RankingRow from './components/RankingRow';
@@ -19,6 +20,7 @@ interface IProps {
 
 interface IState {
   event: Event | null,
+  qrcode: string,
   rankings: Ranking[],
   matches: Match[],
   loading: boolean
@@ -34,6 +36,7 @@ class PitDisplay extends React.Component<IProps, IState> {
     this._timerID = null;
     this.state = {
       event: null,
+      qrcode: '',
       rankings: [],
       matches: [],
       loading: true,
@@ -44,9 +47,12 @@ class PitDisplay extends React.Component<IProps, IState> {
 
   public componentDidMount() {
     TOAProvider.getEvent(this.props.eventKey).then((event: Event) => {
-      const fetchData = () => this.fetchData(event);
-      setInterval(fetchData, 30 * 1000);
-      return fetchData();
+      return QRCode.toDataURL('https://ftc.events/' + event.eventKey, { errorCorrectionLevel: 'H' }, (err: Error, url: string) => {
+        console.log(url);
+        const fetchData = () => this.fetchData(event, url);
+        setInterval(fetchData, 30 * 1000);
+        return fetchData();
+      });
     }).catch((error: any) => {
       console.error(error);
       this.setState({ loading: false });
@@ -54,13 +60,13 @@ class PitDisplay extends React.Component<IProps, IState> {
     window.onresize = () => this.setState({}); // Check cards height [componentDidUpdate]
   }
 
-  public fetchData(event: Event) {
+  public fetchData(event: Event, qrcode: string) {
     return TOAProvider.getEventRankings(event.eventKey).then((rankings: Ranking[]) => {
       return TOAProvider.getEventMatches(event.eventKey).then((matches: Match[]) => {
         if (rankings.length > 0 && matches.length > 0) {
-          this.setState({ loading: false, event, rankings, matches });
+          this.setState({ loading: false, event, qrcode, rankings, matches });
         } else {
-          this.setState({ loading: false, event });
+          this.setState({ loading: false, event, qrcode });
         }
       });
     });
@@ -82,16 +88,20 @@ class PitDisplay extends React.Component<IProps, IState> {
   }
 
   public render() {
-    const { loading, event, rankings, matches, rankingsScroll, matchesScroll } = this.state;
+    const { loading, event, qrcode, rankings, matches, rankingsScroll, matchesScroll } = this.state;
     if (loading) return <span/>;
     const rankingsView = rankings.map((ranking: Ranking) => <RankingRow key={ranking.rankKey} ranking={ranking} />);
     const matchesView = matches.map((match: Match) => <MatchRow key={match.matchKey} match={match} />);
+    
     return <main className="container">
       { event ? <>
-        <div style={{ padding: '40px 0' }}>
-          <h1 className="title">{event.fullEventName}</h1>
-          <h2 className="subtitle">Real-time results are available at <b>The Orange Alliance</b>!</h2>
-          <h4 className="subtitle2">https://ftc.events/{event.eventKey}</h4>
+        <div style={{ padding: '40px 0', display: 'flex' }}>
+          <img src={qrcode} className="qrcode" />
+          <div style={{ margin: '0 25px' }}>
+            <h1 className="title">{event.fullEventName}</h1>
+            <h2 className="subtitle">Real-time results are available at <b>The Orange Alliance</b>!</h2>
+            <h4 className="subtitle2">https://ftc.events/{event.eventKey}</h4>
+          </div>
         </div>
         <div className="row">
           { rankings.length > 0 && matches.length > 0 ? <>
