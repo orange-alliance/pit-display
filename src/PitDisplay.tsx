@@ -2,6 +2,7 @@ import React from 'react';
 import QRCode from 'qrcode';
 import { API } from '@the-orange-alliance/api/lib';
 import { Event, Ranking, Match } from '@the-orange-alliance/api/lib/models';
+import { matchSorter } from './utils';
 import RankingRow from './components/RankingRow';
 import MatchRow from './components/MatchRow';
 
@@ -63,6 +64,7 @@ class PitDisplay extends React.Component<IProps, IState> {
   public fetchData(event: Event, qrcode: string) {
     return TOAProvider.getEventRankings(event.eventKey).then((rankings: Ranking[]) => {
       return TOAProvider.getEventMatches(event.eventKey).then((matches: Match[]) => {
+        matches.sort(matchSorter);
         if (rankings.length > 0 && matches.length > 0) {
           this.setState({ loading: false, event, qrcode, rankings, matches });
         } else {
