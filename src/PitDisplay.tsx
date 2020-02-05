@@ -48,7 +48,7 @@ class PitDisplay extends React.Component<IProps, IState> {
 
   public componentDidMount() {
     TOAProvider.getEvent(this.props.eventKey).then((event: Event) => {
-      return QRCode.toDataURL('https://ftc.events/' + event.eventKey, { errorCorrectionLevel: 'H' }, (err: Error, url: string) => {
+      return QRCode.toDataURL('https://toa.events/' + event.eventKey, { errorCorrectionLevel: 'H' }, (err: Error, url: string) => {
         console.log(url);
         const fetchData = () => this.fetchData(event, url);
         setInterval(fetchData, 30 * 1000);
@@ -102,7 +102,7 @@ class PitDisplay extends React.Component<IProps, IState> {
           <div style={{ margin: '0 25px' }}>
             <h1 className="title">{event.fullEventName}</h1>
             <h2 className="subtitle">Real-time results are available at <b>The Orange Alliance</b>!</h2>
-            <h4 className="subtitle2">https://ftc.events/{event.eventKey}</h4>
+            <h4 className="subtitle2">https://toa.events/{event.eventKey}</h4>
           </div>
         </div>
         <div className="row">
