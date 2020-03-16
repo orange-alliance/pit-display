@@ -98,7 +98,7 @@ class PitDisplay extends React.Component<IProps, IState> {
     return <main className="container">
       { event ? <>
         <div style={{ padding: '40px 0', display: 'flex' }}>
-          <img src={qrcode} className="qrcode" />
+          <img src={qrcode} className="qrcode" alt="QR Code" />
           <div style={{ margin: '0 25px' }}>
             <h1 className="title">{event.fullEventName}</h1>
             <h2 className="subtitle">Real-time results are available at <b>The Orange Alliance</b>!</h2>
