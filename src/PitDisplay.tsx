@@ -47,6 +47,10 @@ class PitDisplay extends React.Component<IProps, IState> {
   }
 
   public componentDidMount() {
+    if (!this.props.eventKey) {
+      this.setState({ loading: false });
+      return;
+    }
     TOAProvider.getEvent(this.props.eventKey).then((event: Event) => {
       return QRCode.toDataURL('https://toa.events/' + event.eventKey, { errorCorrectionLevel: 'H' }, (err: Error, url: string) => {
         console.log(url);
